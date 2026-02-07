@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In liebevoller Erinnerung an Udo Wienke</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .image-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .memorial-image {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+        }
+
+        .message-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid #4a5568;
+            margin: 30px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message {
+            font-size: 1.3em;
+            line-height: 1.6;
+            color: #2c3e50;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-family: 'Georgia', serif;
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 85, 104, 0.4);
+        }
+
+        .refresh-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #2c5282 0%, #2a4365 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-family: 'Georgia', serif;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 82, 130, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .message {
+                font-size: 1.1em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .submit-button {
+                margin-left: 0;
+                margin-top: 10px;
+                display: block;
+                width: 100%;
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .refresh-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Udo Wienke</h1>
+            <p class="subtitle">In liebevoller Erinnerung</p>
+        </div>
+
+        <div class="content">
+            <div class="image-container">
+                <img id="memorialImage" class="memorial-image" src="" alt="Udo Wienke">
+            </div>
+
+            <div class="message-container">
+                <p id="memorialMessage" class="message loading">Lade Erinnerung...</p>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="refresh-button" onclick="loadContent()">
+                    Neue Erinnerung laden
+                </button>
+                <button class="submit-button" onclick="sendContent()">
+                    Bilder oder Text einsenden
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Ehemann • Papa • Schwiegerpapa • Opa • Guter Freund</p>
+            <p>Für immer in unseren Herzen</p>
+        </div>
+    </div>
+
+    <script>
+        const MAX_IMAGES = 2;
+        const messages = [
+            'Komm bei mich bei, mein Herz bummert nach du',
+            'Früh morgens steh ich auf, 18: 10',
+            'Wie fanden Sie den Kaffee ? Rein zufällig.'
+        ];
+
+        let imageCount = MAX_IMAGES;
+
+        // Lade zufälligen Inhalt
+        function loadContent() {
+            // Zeige zufällige Nachricht
+            if (messages.length > 0) {
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                document.getElementById('memorialMessage').textContent = randomMessage;
+                document.getElementById('memorialMessage').classList.remove('loading');
+            }
+
+            // Zeige zufälliges Bild
+            if (imageCount > 0) {
+                const randomImageNumber = Math.floor(Math.random() * imageCount) + 1;
+                const imageElement = document.getElementById('memorialImage');
+                imageElement.src = `img/${randomImageNumber}.jpg`;
+                imageElement.onerror = function () {
+                    // Falls das Bild nicht geladen werden kann, versuche ein anderes
+                    if (imageCount > 1) {
+                        const alternativeNumber = (randomImageNumber % imageCount) + 1;
+                        this.src = `img/${alternativeNumber}.jpg`;
+                    }
+                };
+            }
+        }
+
+        // Initialisierung beim Laden der Seite
+        function init() {
+            loadContent();
+        }
+
+        // Starte beim Laden der Seite
+        init();
+
+        // Funktion zum Einsenden von Bildern oder Text
+        function sendContent() {
+            const email = 'bormann.fabian@gmail.com';
+            const subject = 'Erinnerung an Udo Wienke - Beitrag';
+            const body = 'Hallo,%0D%0A%0D%0AIch möchte gerne einen Beitrag für die Gedenkseite von Udo Wienke einsenden:%0D%0A%0D%0A[Bitte hier Ihren Text einfügen oder Bilder als Anhang beifügen]%0D%0A%0D%0AVielen Dank!';
+
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+        }
+    </script>
+</body>
+
+</html>
